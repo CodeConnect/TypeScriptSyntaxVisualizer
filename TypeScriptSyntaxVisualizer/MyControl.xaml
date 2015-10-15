@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="CodeConnect.TypeScriptSyntaxVisualizer.MyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="300"
+             Name="SyntaxVisualizerControl">
+
+    <Grid Margin="5" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Name="SyntaxTreeGrid" Grid.Row="0" VerticalAlignment="Stretch" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,0" BorderBrush="#FF828790" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <Label Name="SyntaxTreeTitle" VerticalAlignment="Stretch" Content="Syntax Tree" FontWeight="Bold" />
+            </Border>
+            <TreeView Name="TreeContainer" Grid.Row="1" VerticalContentAlignment="Stretch" MouseLeftButtonUp="TreeContainer_MouseLeftButtonUp" />
+        </Grid>
+        <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
+        <Grid Name="TableGrid" Grid.Row="2" VerticalAlignment="Stretch" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="1,1,1,0" BorderBrush="#FF828790" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <Label Name="PropertiesTitle" VerticalAlignment="Stretch" Content="Properties" FontWeight="Bold" />
+            </Border>
+            <WindowsFormsHost Grid.Row="1" Name="windowsFormsHost" Padding="5" />
+        </Grid>
+    </Grid>
+</UserControl>
