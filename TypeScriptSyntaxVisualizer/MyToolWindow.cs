@@ -16,9 +16,6 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
     [Guid("4a2b96fc-bf73-420e-ad92-dbc15aac6b39")]
     public class MyToolWindow : ToolWindowPane, IOleCommandTarget
     {
-
-
-
         public MyToolWindow() : base(null)
         {
             this.Caption = "TypeScript Syntax Visaulizer";

@@ -208,8 +208,12 @@
   <ItemGroup>
     <Content Include="Resources\convert.js" />
     <Content Include="Resources\Package.ico" />
-    <Content Include="ScriptExecutionEnvironment.dll" />
-    <Content Include="tschost.dll" />
+    <Content Include="Resources\ScriptExecutionEnvironment.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\tschost.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MyControl.xaml">
