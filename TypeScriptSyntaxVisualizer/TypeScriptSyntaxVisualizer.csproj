@@ -173,6 +173,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="SyntaxNodeOrToken.cs" />
     <Compile Include="TextViewCreationListener.cs" />
     <Compile Include="TypeScriptSyntaxVisualizerPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

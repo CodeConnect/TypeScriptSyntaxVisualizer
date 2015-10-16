@@ -1,24 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using CodeConnect.TypeScriptSyntaxVisualizer;
-using System.Runtime.InteropServices;
 
 namespace CodeConnect.TypeScriptSyntaxVisualizer
 {
-    /// <summary>
-    /// Interaction logic for MyControl.xaml
-    /// </summary>
     public partial class MyControl : UserControl
     {
         private readonly System.Windows.Forms.PropertyGrid _propertyGrid;
@@ -36,7 +24,7 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
             windowsFormsHost.Child = _propertyGrid;
         }
 
-        internal void UpdateWithSyntaxRoot(TextViewCreationListener.CustomNode root, int position)
+        internal void UpdateWithSyntaxRoot(SyntaxNodeOrToken root, int position)
         {
             clear();
             TreeViewItem rootItem = null;
@@ -60,7 +48,7 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
             collapseAllItems(rootItem);
             var correspondingTreeViewItem = findCorrespondingTreeViewItem(position);
             correspondingTreeViewItem.IsSelected = true;
-            _propertyGrid.SelectedObject = (TextViewCreationListener.CustomNode)correspondingTreeViewItem.DataContext;
+            _propertyGrid.SelectedObject = (SyntaxNodeOrToken)correspondingTreeViewItem.DataContext;
         }
 
         private TreeViewItem findCorrespondingTreeViewItem(int position)
@@ -70,13 +58,13 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
             {
                 foreach (TreeViewItem childItem in currentItem.Items)
                 {
-                    var childNode = (TextViewCreationListener.CustomNode)childItem.DataContext;
-                    if (childNode.Pos == childNode.End && childNode.Pos == position)
+                    var childNode = (SyntaxNodeOrToken)childItem.DataContext;
+                    if (childNode.StartPosition == childNode.End && childNode.StartPosition == position)
                     {
                         currentItem.IsExpanded = true;
                         return childItem;
                     }
-                    else if (childNode.Pos <= position && position < childNode.End)
+                    else if (childNode.StartPosition <= position && position < childNode.End)
                     {
                         currentItem.IsExpanded = true;
                         currentItem = childItem;
@@ -96,11 +84,18 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
             item.IsExpanded = false;
         }
 
-        private void generateSyntaxTreeView(TextViewCreationListener.CustomNode node, TreeViewItem item)
+        private void generateSyntaxTreeView(SyntaxNodeOrToken node, TreeViewItem item)
         {
-            item.Header = node.Kind + " [" + node.Pos + ".." + node.End + ")";
-            if (node.IsToken) { item.Foreground = Brushes.Green; }
-            else { item.Foreground = Brushes.Blue; }
+            item.Header = node.Kind + " [" + node.StartPosition + ".." + node.End + ")";
+
+            if (node.IsToken)
+            {
+                item.Foreground = Brushes.Green;
+            }
+            else
+            {
+                item.Foreground = Brushes.Blue;
+            }
 
             foreach (var child in node.Children)
             {
@@ -113,16 +108,16 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
 
         private void selectText(TreeViewItem item)
         {
-            var node = (TextViewCreationListener.CustomNode)item.DataContext;
+            var node = (SyntaxNodeOrToken)item.DataContext;
             //TODO
         }
 
-        private void TreeContainer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void treeContainer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (sender is TreeView)
             {
                 var item = (sender as TreeView).SelectedItem;
-                _propertyGrid.SelectedObject = (TextViewCreationListener.CustomNode)(item as TreeViewItem).DataContext;
+                _propertyGrid.SelectedObject = (SyntaxNodeOrToken)(item as TreeViewItem).DataContext;
                 selectText(item as TreeViewItem);
             }
         }

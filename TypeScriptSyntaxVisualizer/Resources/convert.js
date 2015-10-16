@@ -49647,7 +49647,7 @@
 		}
 		customNode["Children"] = children;
 		customNode["Kind"] = SyntaxKindReverse[node.kind].toString();
-		customNode["Pos"] = node.pos;
+		customNode["StartPosition"] = node.pos;
 		customNode["End"] = node.end;
 		customNode["Text"] = node.getText();
         customNode["IsToken"] = ts.isToken(node);

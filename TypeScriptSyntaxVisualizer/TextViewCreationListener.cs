@@ -10,20 +10,18 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text;
+using System.Collections.ObjectModel;
 
 namespace CodeConnect.TypeScriptSyntaxVisualizer
 {
-    [Export(typeof(IWpfTextViewCreationListener))]
-    [ContentType("text")]
+    [Export(typeof(IWpfTextViewConnectionListener))]
+    [ContentType("TypeScript")]
+    [ContentType("JavaScript")]
     [TextViewRole(PredefinedTextViewRoles.Document)]
-    public class TextViewCreationListener : IWpfTextViewCreationListener
+    public class TextViewCreationListener : IWpfTextViewConnectionListener
     {
-        IWpfTextView _textView;
-        public void TextViewCreated(IWpfTextView textView)
-        {
-            _textView = textView;
-            textView.Caret.PositionChanged += Caret_PositionChanged;
-        }
+      
 
         public class TypeScriptProcessor : IDisposable
         {
@@ -81,34 +79,15 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
             private static extern int CreateExecutionEngine([MarshalAs(UnmanagedType.LPWStr)] string name, [MarshalAs(UnmanagedType.Bool)] bool enableDebugging, [MarshalAs(UnmanagedType.Bool)] bool forceJScript9, out IJavaScriptExecutionEngine engine);
         }
 
-        public class CustomNode
-        {
-            [Browsable(false)]
-            public List<CustomNode> Children { get; } = new List<CustomNode>();
-            public string Kind { get; }
-            public int Pos { get;  }
-            public int End { get;  }
-            public string Text { get; }
-            public bool IsToken { get; }
-
-            public CustomNode(string kind, int pos, int end, string text, bool isToken)
-            {
-                Kind = kind;
-                Pos = pos;
-                End = end;
-                Text = text;
-                IsToken = isToken;
-            }
-        }
-
-        private async void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs args)
+        private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs args)
         {
             try
             {
-                //Get Text 
+                var caret = (ITextCaret)sender;
                 int position = args.NewPosition.BufferPosition.Position;
-                var rawText = _textView.TextBuffer.CurrentSnapshot.GetText();
 
+                //We roll the dice on an OOM exception... :(
+                string rawText = caret.ContainingTextViewLine.Snapshot.GetText();   
 
                 using (TypeScriptProcessor tsProcessor = new TypeScriptProcessor())
                 {
@@ -116,7 +95,7 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
                     var serializer = new JsonSerializer();
                     using (TextReader sr = new StringReader(result))
                     {
-                        var root = (CustomNode)serializer.Deserialize(sr, typeof(CustomNode));
+                        var root = (SyntaxNodeOrToken)serializer.Deserialize(sr, typeof(SyntaxNodeOrToken));
                         MyToolWindow.MyControl.UpdateWithSyntaxRoot(root, position);
                         System.Diagnostics.Debug.WriteLine(root.Kind);
                     }
@@ -127,6 +106,16 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
                 var error = e.ToString();
                 System.Diagnostics.Debug.WriteLine(error);
             }
+        }
+
+        public void SubjectBuffersConnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
+        {
+            textView.Caret.PositionChanged += Caret_PositionChanged;
+        }
+
+        public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
+        {
+            textView.Caret.PositionChanged -= Caret_PositionChanged;
         }
     }
 }

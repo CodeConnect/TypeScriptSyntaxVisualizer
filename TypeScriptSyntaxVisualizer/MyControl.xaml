@@ -21,7 +21,7 @@
             <Border Grid.Row="0" BorderThickness="1,1,1,0" BorderBrush="#FF828790" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
                 <Label Name="SyntaxTreeTitle" VerticalAlignment="Stretch" Content="Syntax Tree" FontWeight="Bold" />
             </Border>
-            <TreeView Name="TreeContainer" Grid.Row="1" VerticalContentAlignment="Stretch" MouseLeftButtonUp="TreeContainer_MouseLeftButtonUp" />
+            <TreeView Name="TreeContainer" Grid.Row="1" VerticalContentAlignment="Stretch" MouseLeftButtonUp="treeContainer_MouseLeftButtonUp" />
         </Grid>
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
         <Grid Name="TableGrid" Grid.Row="2" VerticalAlignment="Stretch" Margin="0,0,0,0">
