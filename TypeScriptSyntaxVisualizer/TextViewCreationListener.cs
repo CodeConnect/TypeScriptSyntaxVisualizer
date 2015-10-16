@@ -83,6 +83,10 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
         {
             try
             {
+                //Don't waste time computing anything if we can't show it.
+                if (!MyToolWindow.MyControl.IsWindowVisible)
+                    return;
+
                 var caret = (ITextCaret)sender;
                 int position = args.NewPosition.BufferPosition.Position;
 

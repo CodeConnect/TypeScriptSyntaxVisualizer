@@ -10,11 +10,12 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using System.Windows.Forms;
 using System.ComponentModel.Composition;
 using System.Windows.Media;
+using Microsoft.VisualStudio;
 
 namespace CodeConnect.TypeScriptSyntaxVisualizer
 {
     [Guid("4a2b96fc-bf73-420e-ad92-dbc15aac6b39")]
-    public class MyToolWindow : ToolWindowPane, IOleCommandTarget
+    public class MyToolWindow : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3
     {
         public MyToolWindow() : base(null)
         {
@@ -40,6 +41,43 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
             var cmdUi = Microsoft.VisualStudio.VSConstants.GUID_TextEditorFactory;
             windowFrame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref cmdUi);
             base.OnToolWindowCreated();
+        }
+        
+        public int OnClose(ref uint pgrfSaveOptions)
+        {
+            return (int)__FRAMECLOSE.FRAMECLOSE_PromptSave;
+        }
+
+        public int OnShow(int fShow)
+        {
+            //VS weirdness
+            //OnShow() tells us when the window is hidden or shown
+            switch((__FRAMESHOW)fShow)
+            {
+                case __FRAMESHOW.FRAMESHOW_WinShown:
+                    MyControl.IsWindowVisible = true;
+                    break;
+                case __FRAMESHOW.FRAMESHOW_WinHidden:
+                    MyControl.IsWindowVisible = false;
+                    break;
+
+            }
+            return VSConstants.S_OK;
+        }
+
+        public int OnMove(int x, int y, int w, int h)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnSize(int x, int y, int w, int h)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnDockableChange(int fDockable, int x, int y, int w, int h)
+        {
+            return VSConstants.S_OK;
         }
     }
 }

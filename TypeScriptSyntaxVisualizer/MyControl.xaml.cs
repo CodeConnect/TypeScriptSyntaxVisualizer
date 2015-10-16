@@ -11,6 +11,8 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
     {
         private readonly System.Windows.Forms.PropertyGrid _propertyGrid;
 
+        public bool IsWindowVisible { get; set; }
+
         public MyControl()
         {
             InitializeComponent();
