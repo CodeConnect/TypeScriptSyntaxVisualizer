@@ -21,8 +21,6 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
     [TextViewRole(PredefinedTextViewRoles.Document)]
     public class TextViewCreationListener : IWpfTextViewConnectionListener
     {
-      
-
         private void Caret_PositionChanged(object sender, CaretPositionChangedEventArgs args)
         {
             try
@@ -35,14 +33,13 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
                 int position = args.NewPosition.BufferPosition.Position;
 
                 //We roll the dice on an OOM exception... :(
-                string rawText = caret.ContainingTextViewLine.Snapshot.GetText();   
+                string rawText = caret.ContainingTextViewLine.Snapshot.GetText();
 
                 using (TypeScriptProcessor tsProcessor = new TypeScriptProcessor())
                 {
                     var root = tsProcessor.ParseFileAndGetSyntaxRoot(rawText);
-                        MyToolWindow.MyControl.UpdateWithSyntaxRoot(root, position);
-                        System.Diagnostics.Debug.WriteLine(root.Kind);
-                    
+                    MyToolWindow.MyControl.UpdateWithSyntaxRoot(root, position);
+                    System.Diagnostics.Debug.WriteLine(root.Kind);
                 }
             }
             catch(Exception e)
