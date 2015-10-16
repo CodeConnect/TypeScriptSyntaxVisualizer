@@ -1,15 +1,7 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using System;
+using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Media;
 using Microsoft.VisualStudio.Text;
 using System.Collections.ObjectModel;
 

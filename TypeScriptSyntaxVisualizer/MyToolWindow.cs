@@ -3,13 +3,6 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.ComponentModelHost;
-using System.Windows.Forms;
-using System.ComponentModel.Composition;
-using System.Windows.Media;
 using Microsoft.VisualStudio;
 
 namespace CodeConnect.TypeScriptSyntaxVisualizer
