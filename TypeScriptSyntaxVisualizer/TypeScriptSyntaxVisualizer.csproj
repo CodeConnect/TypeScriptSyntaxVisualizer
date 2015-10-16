@@ -175,6 +175,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="SyntaxNodeOrToken.cs" />
     <Compile Include="TextViewCreationListener.cs" />
+    <Compile Include="TypeScriptProcessor.cs" />
     <Compile Include="TypeScriptSyntaxVisualizerPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PkgCmdID.cs" />
