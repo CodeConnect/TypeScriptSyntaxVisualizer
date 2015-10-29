@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -9,6 +12,7 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
         private readonly System.Windows.Forms.PropertyGrid _propertyGrid;
 
         public bool IsWindowVisible { get; set; }
+        DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
 
         public MyControl()
         {
@@ -107,8 +111,18 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
 
         private void selectText(TreeViewItem item)
         {
-            var node = (SyntaxNodeOrToken)item.DataContext;
-            //TODO
+            try {
+                var node = (SyntaxNodeOrToken)item.DataContext;
+                var document = dte.ActiveDocument;
+                var selected = (TextSelection)document.Selection;
+                selected.StartOfDocument(false);
+                selected.MoveToAbsoluteOffset(node.StartPosition + 1, false);
+                selected.MoveToAbsoluteOffset(node.End + 1, true);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+            }
         }
 
         private void treeContainer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
