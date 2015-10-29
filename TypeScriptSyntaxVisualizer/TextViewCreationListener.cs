@@ -20,6 +20,11 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
                 //Don't waste time computing anything if we can't show it.
                 if (!MyToolWindow.MyControl.IsWindowVisible)
                     return;
+                if (MyToolWindow.MyControl.CaretPosChangeBecauseOfTextSlection)
+                {
+                    MyToolWindow.MyControl.CaretPosChangeBecauseOfTextSlection = false;
+                    return;
+                }
 
                 var caret = (ITextCaret)sender;
                 int position = args.NewPosition.BufferPosition.Position;

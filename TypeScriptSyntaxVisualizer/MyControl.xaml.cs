@@ -12,7 +12,8 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
         private readonly System.Windows.Forms.PropertyGrid _propertyGrid;
 
         public bool IsWindowVisible { get; set; }
-        DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+        public bool CaretPosChangeBecauseOfTextSlection { get; set; }
+        private DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
 
         public MyControl()
         {
@@ -116,8 +117,11 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
                 var node = (SyntaxNodeOrToken)item.DataContext;
                 var document = dte.ActiveDocument;
                 var selected = (TextSelection)document.Selection;
+                CaretPosChangeBecauseOfTextSlection = true;
                 selected.StartOfDocument(false);
+                CaretPosChangeBecauseOfTextSlection = true;
                 selected.MoveToAbsoluteOffset(node.StartPosition + 1, false);
+                CaretPosChangeBecauseOfTextSlection = true;
                 selected.MoveToAbsoluteOffset(node.End + 1, true);
             }
             catch (Exception e)
