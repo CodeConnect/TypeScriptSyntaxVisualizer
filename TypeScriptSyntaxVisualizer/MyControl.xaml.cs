@@ -111,7 +111,8 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
 
         private void selectText(TreeViewItem item)
         {
-            try {
+            try
+            {
                 var node = (SyntaxNodeOrToken)item.DataContext;
                 var document = dte.ActiveDocument;
                 var selected = (TextSelection)document.Selection;

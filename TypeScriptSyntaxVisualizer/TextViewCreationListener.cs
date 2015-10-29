@@ -26,22 +26,15 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
 
                 //We roll the dice on an OOM exception... :(
                 string rawText = caret.ContainingTextViewLine.Snapshot.GetText();
-                string textbeforecaret = rawText.Substring(0, position);
+                string textBeforeCaret = rawText.Substring(0, position);
 
-                int linenum = 0;
-                foreach (char c in textbeforecaret)
-                {
-                    if (c == '\r')
-                    {
-                        linenum += 1;
-                    }
-                }
+                int lineNumber = getLineNumberAboveCaret(textBeforeCaret, position);
                 rawText = rawText.Replace("\r\n", "\n");
 
                 using (TypeScriptProcessor tsProcessor = new TypeScriptProcessor())
                 {
                     var root = tsProcessor.ParseFileAndGetSyntaxRoot(rawText);
-                    MyToolWindow.MyControl.UpdateWithSyntaxRoot(root, position - linenum);
+                    MyToolWindow.MyControl.UpdateWithSyntaxRoot(root, position - lineNumber);
                     System.Diagnostics.Debug.WriteLine(root.Kind);
                 }
             }
@@ -60,6 +53,19 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
         public void SubjectBuffersDisconnected(IWpfTextView textView, ConnectionReason reason, Collection<ITextBuffer> subjectBuffers)
         {
             textView.Caret.PositionChanged -= Caret_PositionChanged;
+        }
+
+        private int getLineNumberAboveCaret(string text, int pos)
+        {
+            int lineNumber = 0;
+            foreach (char c in text)
+            {
+                if (c == '\n')
+                {
+                    lineNumber += 1;
+                }
+            }
+            return lineNumber;
         }
     }
 }
