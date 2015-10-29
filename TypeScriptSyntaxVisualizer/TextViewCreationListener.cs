@@ -20,9 +20,9 @@ namespace CodeConnect.TypeScriptSyntaxVisualizer
                 //Don't waste time computing anything if we can't show it.
                 if (!MyToolWindow.MyControl.IsWindowVisible)
                     return;
-                if (MyToolWindow.MyControl.CaretPosChangeBecauseOfTextSlection)
+                if (MyToolWindow.MyControl.IgnoreNextCaretPositionChange)
                 {
-                    MyToolWindow.MyControl.CaretPosChangeBecauseOfTextSlection = false;
+                    MyToolWindow.MyControl.IgnoreNextCaretPositionChange = false;
                     return;
                 }
 
